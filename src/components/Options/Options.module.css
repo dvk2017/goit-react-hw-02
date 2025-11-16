@@ -1,0 +1,6 @@
+.container {
+  margin: 4px 0;
+  display: flex;
+  gap: 2px;
+  font-size: 12px;
+}
