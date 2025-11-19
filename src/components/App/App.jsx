@@ -26,22 +26,36 @@ export default function App() {
   }, [reviews]);
 
   const updateFeedback = (feedbackType) => {
-    const feedbackMap = {
-      good: { ...reviews, good: reviews.good + 1 },
-      neutral: { ...reviews, neutral: reviews.neutral + 1 },
-      bad: { ...reviews, bad: reviews.bad + 1 },
-      reset: { good: 0, neutral: 0, bad: 0 },
-    };
-    setReviews(feedbackMap[feedbackType]);
+    setReviews({
+      ...reviews,
+      [feedbackType]: reviews[feedbackType] + 1,
+    });
+  };
+
+  const resetFeedback = () => {
+    setReviews({ good: 0, neutral: 0, bad: 0 });
   };
 
   const totalFeedback = reviews.good + reviews.neutral + reviews.bad;
+  const positive = Math.round((reviews.good / totalFeedback) * 100 || 0);
 
   return (
     <div className={css.container}>
       <Description />
-      <Options handleClick={updateFeedback} totalFeedback={totalFeedback} />
-      {totalFeedback === 0 ? <Notification /> : <Feedback reviews={reviews} />}
+      <Options
+        updateFeedback={updateFeedback}
+        resetFeedback={resetFeedback}
+        totalFeedback={totalFeedback}
+      />
+      {totalFeedback === 0 ? (
+        <Notification />
+      ) : (
+        <Feedback
+          reviews={reviews}
+          totalFeedback={totalFeedback}
+          positive={positive}
+        />
+      )}
     </div>
   );
 }
